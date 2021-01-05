@@ -1,0 +1,58 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema trackerdb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema trackerdb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `trackerdb` DEFAULT CHARACTER SET utf8 ;
+USE `trackerdb` ;
+
+-- -----------------------------------------------------
+-- Table `trackerdb`.`exercises`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `trackerdb`.`exercises` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `pushups` INT NULL,
+  `situps` VARCHAR(45) NULL,
+  `planks` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `trackerdb`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `trackerdb`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `rank` VARCHAR(100) NOT NULL,
+  `first_name` VARCHAR(100) NOT NULL,
+  `middle_name` VARCHAR(100) NULL,
+  `weight` VARCHAR(45) NOT NULL,
+  `height` VARCHAR(45) NOT NULL,
+  `body_fat_percent` VARCHAR(45) NULL,
+  `create_date` DATETIME NOT NULL,
+  `fitness_rank` INT NOT NULL,
+  `exercise_type` INT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_user_exercises_idx` (`exercise_type` ASC),
+  CONSTRAINT `fk_user_exercises`
+    FOREIGN KEY (`exercise_type`)
+    REFERENCES `trackerdb`.`exercises` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE USER 'tracker'@'localhost' IDENTIFIED BY 'tracker';
+
+GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `trackerdb`.* TO 'tracker'@'localhost';
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
