@@ -7,6 +7,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema trackerdb
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `trackerdb` ;
 
 -- -----------------------------------------------------
 -- Schema trackerdb
@@ -15,9 +16,11 @@ CREATE SCHEMA IF NOT EXISTS `trackerdb` DEFAULT CHARACTER SET utf8 ;
 USE `trackerdb` ;
 
 -- -----------------------------------------------------
--- Table `trackerdb`.`exercises`
+-- Table `exercises`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trackerdb`.`exercises` (
+DROP TABLE IF EXISTS `exercises` ;
+
+CREATE TABLE IF NOT EXISTS `exercises` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `pushups` INT NULL,
   `situps` VARCHAR(45) NULL,
@@ -27,9 +30,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `trackerdb`.`user`
+-- Table `user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trackerdb`.`user` (
+DROP TABLE IF EXISTS `user` ;
+
+CREATE TABLE IF NOT EXISTS `user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `rank` VARCHAR(100) NOT NULL,
   `first_name` VARCHAR(100) NOT NULL,
@@ -44,14 +49,18 @@ CREATE TABLE IF NOT EXISTS `trackerdb`.`user` (
   INDEX `fk_user_exercises_idx` (`exercise_type` ASC),
   CONSTRAINT `fk_user_exercises`
     FOREIGN KEY (`exercise_type`)
-    REFERENCES `trackerdb`.`exercises` (`id`)
+    REFERENCES `exercises` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+SET SQL_MODE = '';
+GRANT USAGE ON *.* TO tracker@localhost;
+ DROP USER tracker@localhost;
+SET SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 CREATE USER 'tracker'@'localhost' IDENTIFIED BY 'tracker';
 
-GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `trackerdb`.* TO 'tracker'@'localhost';
+GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE * TO 'tracker'@'localhost';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
